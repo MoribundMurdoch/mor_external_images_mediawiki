@@ -62,4 +62,4 @@ HTML attributes are escaped before output.
 referrerpolicy="no-referrer" is added to generated image tags.
 License
 
-GPL-3.0-or-later.
+MIT.

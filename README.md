@@ -11,7 +11,9 @@ A small MediaWiki parser tag extension for safely embedding whitelisted external
 
 ```wiki
 <extimg src="https://pbs.twimg.com/media/example.jpg" alt="Example image" width="600" />
-Purpose
+```
+
+## Purpose
 
 MediaWiki normally prefers locally uploaded files. This extension adds a controlled way to embed external images from explicitly allowed image hosts.
 
@@ -19,24 +21,29 @@ It is designed for personal, indie, educational, or small MediaWiki installs whe
 
 Administrators choose which external image hosts they trust.
 
-Installation
+## Installation
 
 Copy this repository into your MediaWiki extensions folder:
 
+```text
 extensions/ExternalImages/
+```
 
-Then add this to LocalSettings.php:
+Then add this to `LocalSettings.php`:
 
+```php
 require_once "$IP/extensions/ExternalImages/ExternalImages.php";
-What is LocalSettings.php?
+```
 
-LocalSettings.php is the main configuration file for a MediaWiki website.
+## What is LocalSettings.php?
+
+`LocalSettings.php` is the main configuration file for a MediaWiki website.
 
 It is where a wiki administrator loads extensions, changes site settings, and controls how the wiki behaves.
 
-For this extension, LocalSettings.php is where you choose which external image hosts your wiki trusts.
+For this extension, `LocalSettings.php` is where you choose which external image hosts your wiki trusts.
 
-Configuration
+## Configuration
 
 You can use the config builder here:
 
@@ -44,24 +51,29 @@ https://techmoribundmurdoch.blogspot.com/2026/05/mor-externalimages-config-build
 
 Or write the config manually:
 
+```php
 $wgExternalImagesAllowedHosts = [
-	'pbs.twimg.com',
-	'blogger.googleusercontent.com',
-	'i.imgur.com',
-	'imgur.com',
-	'preview.redd.it',
-	'i.redd.it',
-	'external-preview.redd.it',
-	'64.media.tumblr.com',
-	'cdn.bsky.app',
-	'imgflip.com',
-	'i.imgflip.com',
+    'pbs.twimg.com',
+    'blogger.googleusercontent.com',
+    'i.imgur.com',
+    'imgur.com',
+    'preview.redd.it',
+    'i.redd.it',
+    'external-preview.redd.it',
+    '64.media.tumblr.com',
+    'cdn.bsky.app',
+    'imgflip.com',
+    'i.imgflip.com',
 ];
 
 $wgExternalImagesDefaultWidth = 600;
 $wgExternalImagesMaxWidth = 1200;
 $wgExternalImagesMaxHeight = 1200;
-Supported attributes
+```
+
+## Supported Attributes
+
+```wiki
 <extimg
   src="https://i.imgur.com/example.png"
   alt="Example image"
@@ -70,15 +82,18 @@ Supported attributes
   height="400"
   class="extimg"
 />
-Security Notes
+```
 
-This extension does not fetch remote images server-side. It only emits an HTML <img> tag after validating the URL scheme and host.
+## Security Notes
 
-Only HTTPS URLs are allowed.
-Only configured hosts are allowed.
-Width and height are clamped.
-HTML attributes are escaped before output.
-referrerpolicy="no-referrer" is added to generated image tags.
-License
+This extension does not fetch remote images server-side. It only emits an HTML `<img>` tag after validating the URL scheme and host.
+
+- Only HTTPS URLs are allowed.
+- Only configured hosts are allowed.
+- Width and height are clamped.
+- HTML attributes are escaped before output.
+- `referrerpolicy="no-referrer"` is added to generated image tags.
+
+## License
 
 MIT.

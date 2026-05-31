@@ -6,6 +6,11 @@
  *
  * Example:
  * <extimg src="https://pbs.twimg.com/media/example.jpg" alt="Example image" width="600" />
+ *
+ * NOTE: This file is the CANONICAL policy source. The browser-extension
+ * Rust validator (src/lib.rs) must mirror $wgExternalImagesAllowedHosts,
+ * $imagePathPatterns, the allowed extensions, and the host-matching logic
+ * below exactly. If you change any of them here, change them there too.
  */
 
 if ( !defined( 'MEDIAWIKI' ) ) {
@@ -19,6 +24,7 @@ $wgExtensionCredits['parserhook'][] = [
 	'version' => '1.3',
 ];
 
+// CANONICAL host allowlist. Keep identical to ALLOWED_HOSTS in src/lib.rs.
 $GLOBALS['wgExternalImagesAllowedHosts'] ??= [
 	'pbs.twimg.com',
 
@@ -32,6 +38,8 @@ $GLOBALS['wgExternalImagesAllowedHosts'] ??= [
 	'external-preview.redd.it',
 
 	'64.media.tumblr.com',
+
+	'media.tenor.com',
 
 	'cdn.bsky.app',
 
@@ -126,6 +134,16 @@ function ExternalImagesRender( $input, array $args, Parser $parser, PPFrame $fra
 	];
 }
 
+/**
+ * Exact host match, or a subdomain of an allowed host.
+ *
+ * Mirrors host_is_allowed() in src/lib.rs:
+ *   host == allowed || host.ends_with(".{allowed}")
+ *
+ * The leading dot is essential: it stops "notimgur.com" from matching
+ * "imgur.com". substr() is used instead of str_ends_with() so this works
+ * on PHP 7.4 as well as 8.x.
+ */
 function ExternalImagesHostIsAllowed( string $host ): bool {
 	$allowedHosts = $GLOBALS['wgExternalImagesAllowedHosts'] ?? [];
 
@@ -137,6 +155,15 @@ function ExternalImagesHostIsAllowed( string $host ): bool {
 		}
 
 		if ( $host === $allowedHost ) {
+			return true;
+		}
+
+		$suffix = '.' . $allowedHost;
+
+		if (
+			strlen( $host ) > strlen( $suffix ) &&
+			substr( $host, -strlen( $suffix ) ) === $suffix
+		) {
 			return true;
 		}
 	}
@@ -153,6 +180,7 @@ function ExternalImagesLooksLikeImage( string $url ): bool {
 
 	$path = strtolower( $path );
 
+	// CANONICAL extension list. Keep identical to src/lib.rs.
 	$allowedExtensions = [
 		'jpg',
 		'jpeg',
@@ -168,6 +196,7 @@ function ExternalImagesLooksLikeImage( string $url ): bool {
 		return true;
 	}
 
+	// CANONICAL path patterns. Keep identical to IMAGE_PATH_PATTERNS in src/lib.rs.
 	$imagePathPatterns = [
 		'/media/',
 		'/profile_banners/',

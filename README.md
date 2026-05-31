@@ -2,6 +2,11 @@
 
 A small MediaWiki parser tag extension for safely embedding whitelisted external images with an `<extimg>` tag.
 
+## Related Tools
+
+- Config builder blog post: https://techmoribundmurdoch.blogspot.com/2026/05/mor-externalimages-config-builder-for.html
+- Browser extension helper: https://github.com/MoribundMurdoch/mor_mediawiki_external_image_gui_helper
+
 ## Example
 
 ```wiki
@@ -10,7 +15,9 @@ Purpose
 
 MediaWiki normally prefers locally uploaded files. This extension adds a controlled way to embed external images from explicitly allowed image hosts.
 
-It is designed for personal or small MediaWiki installs where the administrator wants to allow external images from selected image/CDN hosts.
+It is designed for personal, indie, educational, or small MediaWiki installs where the administrator wants to allow external images from selected image/CDN hosts.
+
+Administrators choose which external image hosts they trust.
 
 Installation
 
@@ -21,9 +28,21 @@ extensions/ExternalImages/
 Then add this to LocalSettings.php:
 
 require_once "$IP/extensions/ExternalImages/ExternalImages.php";
+What is LocalSettings.php?
+
+LocalSettings.php is the main configuration file for a MediaWiki website.
+
+It is where a wiki administrator loads extensions, changes site settings, and controls how the wiki behaves.
+
+For this extension, LocalSettings.php is where you choose which external image hosts your wiki trusts.
+
 Configuration
 
-Example:
+You can use the config builder here:
+
+https://techmoribundmurdoch.blogspot.com/2026/05/mor-externalimages-config-builder-for.html
+
+Or write the config manually:
 
 $wgExternalImagesAllowedHosts = [
 	'pbs.twimg.com',
@@ -51,7 +70,7 @@ Supported attributes
   height="400"
   class="extimg"
 />
-Security notes
+Security Notes
 
 This extension does not fetch remote images server-side. It only emits an HTML <img> tag after validating the URL scheme and host.
 
